@@ -78,14 +78,23 @@ void loop(){
     sensors_event_t gyro;
     sensors_event_t temp;
     sensors_event_t accel;
+    //Get data Accel
     dso32.getEvent(&accel, &gyro, &temp);
-
     accel_z = accel.acceleration.z; 
+    
+    //Get data armed 
+    armed = digitalRead(RELEASE); 
+
+    //Detect free fall
+    if (armed && abs(accel_z) < ACCEL_THRESHOLD){
+        Serial.println("Parachute Released");
+    }
     if (abs(accel_z) < ACCEL_THRESHOLD){
         Serial.println("Free Fall Detected");
     }
-    Serial.print("Accel: ");
-    Serial.println(accel_z);
+
+    //Serial.print("Accel: ");
+    //Serial.println(accel_z);
 }
 
 //Flashes LED with del seconds inbetween 
