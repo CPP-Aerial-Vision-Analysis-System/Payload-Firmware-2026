@@ -62,11 +62,7 @@ void setup(){
 }
 
 void loop(){
-    flash(ledRed, 50);
-    cw(s1, 100);
-    delay(1000);
-    ccw(s1,0);
-    delay(1000);
+    Serial.println(digitalRead(RELEASE)); 
 
 }
 
