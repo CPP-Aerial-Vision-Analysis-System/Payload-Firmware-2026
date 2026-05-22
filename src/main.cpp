@@ -12,7 +12,7 @@ static const int SERVO_MIN_US = 500;
 static const int SERVO_MAX_US = 2400;
 
 //Snag Wire 
-static const int RELEASE = 5; 
+static const int RELEASE = 5; //ZERO == NOT RELEASED
 
 //Accel Init
 Adafruit_LSM6DSO32 dso32;
@@ -62,11 +62,7 @@ void setup(){
 }
 
 void loop(){
-    flash(ledRed, 50);
-    cw(s1, 100);
-    delay(1000);
-    ccw(s1,0);
-    delay(1000);
+    Serial.println(digitalRead(RELEASE)); 
 
 }
 
