@@ -26,7 +26,7 @@ const int ledGreen= 32;
 bool armed;
 
 //Prototype Functions 
-void flash(int pin);
+void flash(int pin, int del);
 void ccw(Servo& a, int target);
 void cw(Servo& a, int target);
 void neutral(Servo& s, int neutral_pos);
@@ -62,15 +62,19 @@ void setup(){
 }
 
 void loop(){
+    flash(ledRed, 50);
+    flash(ledYellow, 50);
+    flash(ledGreen, 50); 
 
 }
 
-void flash(int pin){
+//Flashes LED with del seconds inbetween 
+void flash(int pin, int del){
   for (int i =0; i<5; i++){
     digitalWrite(pin, HIGH);
-    delay(50);
+    delay(del);
     digitalWrite(pin, LOW);
-    delay(50); 
+    delay(del); 
   }
 }
 
