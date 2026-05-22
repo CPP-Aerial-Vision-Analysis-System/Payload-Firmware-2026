@@ -66,17 +66,44 @@ void loop(){
 }
 
 void flash(int pin){
-
+  for (int i =0; i<5; i++){
+    digitalWrite(pin, HIGH);
+    delay(50);
+    digitalWrite(pin, LOW);
+    delay(50); 
+  }
 }
 
-void ccw(Servo& a, int target){
-
+// Moves clockwise to absolute target (target > current)
+void cw(Servo& a, int target) {
+  int pos = a.read();
+  for (int i = pos; i <= target; i++) {
+    a.write(i);
+    delay(1);
+  }
 }
 
-void cw(Servo& a, int target){
-
+// Moves counterclockwise to absolute target (target < current)
+void ccw(Servo& a, int target) {
+  int pos = a.read();
+  for (int i = pos; i >= target; i--) {
+    a.write(i);
+    delay(1);
+  }
 }
 
-void neutral(Servo& a, int target){
-
+// Holds / returns to neutral position
+void neutral(Servo& s, int neutral_pos) {
+  int pos = s.read();
+  if (pos < neutral_pos) {
+    for (int i = pos; i <= neutral_pos; i++) {
+      s.write(i);
+      delay(10);
+    }
+  } else if (pos > neutral_pos) {
+    for (int i = pos; i >= neutral_pos; i--) {
+      s.write(i);
+      delay(10);
+    }
+  }
 }
