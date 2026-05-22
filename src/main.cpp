@@ -26,6 +26,7 @@ const int ledGreen= 32;
 //Timer
 unsigned long startTime = 0;
 bool timerRunning = false;
+const float TIME_THRESHOLD = 500; 
 
 //Vars
 bool armed;
@@ -98,7 +99,7 @@ void loop(){
         release = true; 
         startTimer();
     }
-    if (timerRunning && millis() - startTime >= 5000 && release) {
+    if (timerRunning && millis() - startTime >= TIME_THRESHOLD && release) {
         timerRunning = false;
         digitalWrite(ledRed, LOW); 
         digitalWrite(ledGreen, HIGH); 
