@@ -25,6 +25,7 @@ const int ledGreen= 32;
 
 //Vars
 bool armed;
+bool release; 
 float accel_z; 
 const float ACCEL_THRESHOLD = 1.0; 
 
@@ -43,7 +44,7 @@ void setup(){
     //Servo
     s1.setPeriodHertz(50);
     s1.attach(P1, SERVO_MIN_US, SERVO_MAX_US);
-    s1.write(45);
+    ccw(s1,90);  
 
     //Snag wire 
     pinMode(RELEASE, INPUT_PULLUP);
@@ -71,6 +72,7 @@ void setup(){
     
     //Armed? 
     armed = digitalRead(RELEASE); 
+    release = false; 
 }
 
 void loop(){
@@ -86,12 +88,20 @@ void loop(){
     armed = digitalRead(RELEASE); 
 
     //Detect free fall
-    if (armed && abs(accel_z) < ACCEL_THRESHOLD){
+    if (armed && abs(accel_z) < ACCEL_THRESHOLD && !release){
         Serial.println("Parachute Released");
+        release = true; 
+        digitalWrite(ledRed, LOW); 
+        digitalWrite(ledGreen, HIGH); 
+        digitalWrite(ledYellow, LOW);
+        cw(s1, 150);
     }
+
+    /*
     if (abs(accel_z) < ACCEL_THRESHOLD){
         Serial.println("Free Fall Detected");
     }
+    */ 
 
     //Serial.print("Accel: ");
     //Serial.println(accel_z);
