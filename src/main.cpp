@@ -63,8 +63,10 @@ void setup(){
 
 void loop(){
     flash(ledRed, 50);
-    flash(ledYellow, 50);
-    flash(ledGreen, 50); 
+    cw(s1, 100);
+    delay(1000);
+    ccw(s1,0);
+    delay(1000);
 
 }
 
