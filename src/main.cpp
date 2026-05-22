@@ -2,6 +2,7 @@
 #include <ESP32Servo.h>
 #include <Wire.h>
 #include <Adafruit_LSM6DSO32.h>
+#include <math.h>
 
 //Servo Init
 Servo s1;
@@ -24,6 +25,8 @@ const int ledGreen= 32;
 
 //Vars
 bool armed;
+float accel_z; 
+const float ACCEL_THRESHOLD = 1.0; 
 
 //Prototype Functions 
 void flash(int pin, int del);
@@ -45,25 +48,44 @@ void setup(){
     //Snag wire 
     pinMode(RELEASE, INPUT_PULLUP);
 
-    //Begin accel over i2c
+    //Accel
+    //Begin over i2c
     if (!dso32.begin_I2C()) {
         while (1) {
         delay(10);
         }
     }
+    //Set ranges 
+    dso32.setAccelRange(LSM6DSO32_ACCEL_RANGE_8_G);
+    dso32.setGyroRange(LSM6DS_GYRO_RANGE_250_DPS);
+    dso32.setAccelDataRate(LSM6DS_RATE_12_5_HZ);
+    dso32.setGyroDataRate(LSM6DS_RATE_12_5_HZ);
 
     //Debug LEDs 
     pinMode(ledRed, OUTPUT); 
     pinMode(ledGreen, OUTPUT); 
     pinMode(ledYellow, OUTPUT);
-    digitalWrite(ledRed, HIGH); 
+    digitalWrite(ledRed, HIGH);  
     digitalWrite(ledGreen, LOW); 
     digitalWrite(ledYellow, LOW);
+    
+    //Armed? 
+    armed = digitalRead(RELEASE); 
 }
 
 void loop(){
-    Serial.println(digitalRead(RELEASE)); 
+    //Collect Accel events 
+    sensors_event_t gyro;
+    sensors_event_t temp;
+    sensors_event_t accel;
+    dso32.getEvent(&accel, &gyro, &temp);
 
+    accel_z = accel.acceleration.z; 
+    if (abs(accel_z) < ACCEL_THRESHOLD){
+        Serial.println("Free Fall Detected");
+    }
+    Serial.print("Accel: ");
+    Serial.println(accel_z);
 }
 
 //Flashes LED with del seconds inbetween 

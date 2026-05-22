@@ -22,7 +22,7 @@ void setup(void) {
 
   Serial.println("LSM6DSO32 Found!");
 
-  dso32.setAccelRange(LSM6DSO32_ACCEL_RANGE_8_G);
+  
   Serial.print("Accelerometer range set to: ");
   switch (dso32.getAccelRange()) {
   case LSM6DSO32_ACCEL_RANGE_4_G:
