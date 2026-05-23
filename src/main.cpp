@@ -26,13 +26,13 @@ const int ledGreen= 32;
 //Timer
 unsigned long startTime = 0;
 bool timerRunning = false;
-const float TIME_THRESHOLD = 500; 
+const float TIME_THRESHOLD = 300; 
 
 //Vars
 bool armed;
 bool release; 
 float accel_z; 
-const float ACCEL_THRESHOLD = 1.0; 
+const float ACCEL_THRESHOLD = 0.3; 
 
 //Prototype Functions 
 void flash(int pin, int del);
@@ -93,12 +93,13 @@ void loop(){
     //Get data armed 
     armed = digitalRead(RELEASE); 
 
-    //Detect free fall
+    //Detect free fall and start timer
     if (armed && abs(accel_z) < ACCEL_THRESHOLD && !release){
         Serial.println("Timer started");
         release = true; 
         startTimer();
     }
+    //Timer delay 
     if (timerRunning && millis() - startTime >= TIME_THRESHOLD && release) {
         timerRunning = false;
         digitalWrite(ledRed, LOW); 
